@@ -1,0 +1,22 @@
+{
+  "name": "o-escrow",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^4.1.0",
+    "@types/node": "^22.20.3",
+    "hardhat": "^3.17.0",
+    "typescript": "~6.0.3"
+  },
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
