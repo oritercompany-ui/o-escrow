@@ -2,7 +2,7 @@
 
 A decentralized ETH escrow DApp built on Ethereum Sepolia.
 
-O-Escrow allows a buyer to lock ETH inside a smart contract and release or refund the funds through on-chain transactions.
+O-Escrow allows buyers to lock ETH inside a smart contract and release or refund the funds through on-chain transactions.
 
 ## Features
 
@@ -11,10 +11,11 @@ O-Escrow allows a buyer to lock ETH inside a smart contract and release or refun
 * ✅ Buyer can complete an escrow
 * ↩️ Buyer can cancel an escrow
 * 🦊 MetaMask wallet integration
-* ⛓️ Ethereum Sepolia network
+* ⛓️ Ethereum Sepolia Testnet
 * 📊 On-chain escrow data
-* 🧪 Smart contract automated tests
+* 🧪 Automated smart contract tests
 * ⚡ React + TypeScript frontend
+* 🔗 ethers.js Web3 integration
 
 ## How It Works
 
@@ -23,8 +24,7 @@ Buyer
   │
   │ Create Escrow + ETH
   ▼
-Smart Contract
-  │
+O-Escrow Smart Contract
   │
   ├── Complete
   │      ↓
@@ -43,7 +43,6 @@ The ETH is held by the smart contract until the buyer completes or cancels the e
 
 * Solidity
 * Ethereum
-* OpenZeppelin
 * Hardhat
 
 ### Frontend
@@ -60,30 +59,36 @@ The ETH is held by the smart contract until the buyer completes or cancels the e
 
 ## Smart Contract
 
-Deployed contract:
+The O-Escrow smart contract is deployed on Ethereum Sepolia.
 
-`0x70B5b6cbb712ee9A5B803c639f606CD99Eb75619`
+**Contract Address**
 
-Network:
+```text
+0x70B5b6cbb712ee9A5B803c639f606CD99Eb75619
+```
 
-`Ethereum Sepolia`
-
-The contract provides:
+### Contract Functions
 
 ```solidity
 createEscrow(address seller)
+
 completeEscrow(uint256 escrowId)
+
 cancelEscrow(uint256 escrowId)
 ```
 
 ## Escrow Lifecycle
 
-### 1. Create
+### 1. Create Escrow
 
-The buyer specifies the seller's wallet address and deposits ETH.
+The buyer specifies the seller's wallet address and deposits ETH into the smart contract.
 
 ```text
-Buyer → Smart Contract
+Buyer
+  │
+  │ ETH + seller address
+  ▼
+Smart Contract
 ```
 
 The contract records:
@@ -93,7 +98,7 @@ The contract records:
 * ETH amount
 * Escrow status
 
-### 2. Complete
+### 2. Complete Escrow
 
 The buyer confirms that the transaction is complete.
 
@@ -101,9 +106,9 @@ The buyer confirms that the transaction is complete.
 Smart Contract → Seller
 ```
 
-The escrow status changes to `Completed` and the ETH is transferred to the seller.
+The escrow status changes to `Completed` and the deposited ETH is transferred to the seller.
 
-### 3. Cancel
+### 3. Cancel Escrow
 
 The buyer can cancel an active escrow.
 
@@ -111,24 +116,30 @@ The buyer can cancel an active escrow.
 Smart Contract → Buyer
 ```
 
-The escrow status changes to `Cancelled` and the ETH is returned to the buyer.
+The escrow status changes to `Cancelled` and the deposited ETH is returned to the buyer.
 
 ## Security Considerations
 
-The contract uses access control to ensure that only the buyer associated with an escrow can complete or cancel it.
+The current contract implements several basic security controls:
 
-The contract also updates the escrow status before performing the external ETH transfer.
+* Seller address cannot be the zero address
+* Escrow amount must be greater than zero
+* Only the buyer associated with an escrow can complete it
+* Only the buyer associated with an escrow can cancel it
+* Escrow status is updated before the external ETH transfer
+* ETH transfer failures revert the transaction
 
-Further security hardening can include:
+The project can be further hardened with additional protections such as:
 
-* Reentrancy protection
+* OpenZeppelin `ReentrancyGuard`
 * Custom Solidity errors
 * Explicit escrow ID validation
-* Additional automated security tests
+* Additional security-focused tests
+* Escrow expiration and dispute handling
 
 ## Testing
 
-The smart contract tests cover the core escrow lifecycle and authorization rules.
+The smart contract includes automated tests covering the core escrow lifecycle and authorization rules.
 
 Example test scenarios:
 
@@ -152,7 +163,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/oritercompany-ui/o-escrow.git
-cd o-escrow
+cd svgo-escrow
 ```
 
 Install dependencies:
@@ -161,7 +172,7 @@ Install dependencies:
 npm install
 ```
 
-Run tests:
+Run smart contract tests:
 
 ```bash
 npx hardhat test
@@ -170,6 +181,8 @@ npx hardhat test
 Start the frontend:
 
 ```bash
+cd frontend
+npm install
 npm run dev
 ```
 
@@ -178,7 +191,7 @@ Then open the local development URL in your browser and connect MetaMask.
 ## Project Structure
 
 ```text
-O-Escrow/
+svgo-escrow/
 │
 ├── contracts/
 │   └── OEscrow.sol
@@ -186,17 +199,49 @@ O-Escrow/
 ├── test/
 │   └── OEscrow.ts
 │
+├── scripts/
+│   └── ...
+│
 ├── frontend/
 │   └── ...
 │
-├── README.md
+├── hardhat.config.ts
 ├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── README.md
 └── .gitignore
+```
+
+## Deployment
+
+**Network:** Ethereum Sepolia Testnet
+
+**Contract:**
+
+```text
+0x70B5b6cbb712ee9A5B803c639f606CD99Eb75619
+```
+
+The deployed contract is intended for testing and demonstration purposes.
+
+## Screenshots
+
+Screenshots of the application interface can be added here.
+
+Example:
+
+```markdown
+![Dashboard](docs/dashboard.png)
+
+![Create Escrow](docs/create-escrow.png)
+
+![My Escrows](docs/my-escrows.png)
 ```
 
 ## Disclaimer
 
-O-Escrow is an educational and portfolio project deployed on the Ethereum Sepolia testnet.
+O-Escrow is an educational and portfolio project deployed on the Ethereum Sepolia Testnet.
 
 Do not use the deployed contract with real funds.
 
@@ -209,4 +254,6 @@ Built as a Web3 portfolio project focused on:
 * Ethereum
 * React
 * TypeScript
+* ethers.js
 * Web3 Wallet Integration
+* Smart Contract Testing
